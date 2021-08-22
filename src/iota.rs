@@ -33,7 +33,7 @@ fn try_network_from_str(arg: &str) -> Result<Network> {
 
 #[derive(Debug, structopt::StructOpt)]
 pub struct ClientArgs {
-    /// The specific IOTA network to broadcast to (mainnet, devnet, testnet)
+    /// Particular IOTA network to broadcast to ("mainnet", "devnet", and "testnet")
     #[structopt(short, long, parse(try_from_str=try_network_from_str))]
     pub network: Option<Network>,
 }

@@ -19,7 +19,7 @@ fn try_message_from_str(arg: &str) -> Result<String> {
 /// Arguments for the `broadcast` subcommand
 #[derive(Debug, structopt::StructOpt)]
 pub struct BroadcastArgs {
-    /// Data to broadcast on the IOTA Tangle (must be <4kb and UTF-8 encoded)
+    /// Data to embed in message payload (must be < 4kb and UTF-8 encoded)
     #[structopt(
         parse(try_from_str=try_message_from_str)
     )]
@@ -41,7 +41,7 @@ impl Command for BroadcastCommand {
     async fn run(self) -> Result<()> {
         let network = match self.client.network {
             Some(ref n) => n,
-            None => &Network::Mainnet,
+            None => &Network::Devnet, // CHANGE BACK TO `Mainnet` later!
         };
         init(&network).await;
 

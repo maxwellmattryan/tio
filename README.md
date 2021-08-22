@@ -2,44 +2,35 @@
 
 ## Overview
 
-`tio`, short for _Tangle IO_, is a CLI tool written in Rust that offers basic messaging broadcasting (and searching) via the [_IOTA_](https://iota.org) protocol. 
+`tio`, short for "Tangle IO", is a CLI tool written in Rust that offers basic messaging broadcasting (and searching) via the [_IOTA_](https://iota.org) protocol. 
 
 ## Features
 
-- send message given a string
-- read data given a message hash 
-- encrypt and decrypt data for messages
+- broadcast message on the IOTA Tangle
+- search for message on the IOTA Tangle
+- encrypt and decrypt message payloads
 
 ## Usage
 
-Sending messages:
+- Broadcasting messages:
 ```bash
-tio send <message>
+USAGE:
+    tio broadcast [OPTIONS] [message]
 
-## e.g.
-tio send "Hello, Tangle!"
-```
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
 
-Reading messages:
-```bash
-tio read <hash_id>
+OPTIONS:
+    -n, --network <network>    Particular IOTA network to broadcast to ("mainnet", "devnet", and "testnet")
 
-## e.g.
-tio read 707096c20143bd35424a8f2ed0b24194b4bfb2614053767c1a9e9a5a0e774dbc
-```
-
-Using encryption and decryption:
-```bash
-## encrypt and send message
-tio send [-e|--encrypt] <message>
-
-## decrypt and read message
-tio read [-d|--decrypt] <hash_id>
+ARGS:
+    <message>    Data to embed in message payload (must be < 4kb and UTF-8 encoded)
 ```
 
 ## Planning
 
-I have never written a _actual_ Rust tool, program, i.e. anything (lol). 
+I have never written a _actual_ Rust tool, program, i.e. anything. 
 This is going to be a fun project learning how to write functional and practical Rust using the IOTA protocol, which I have an interest in.
 
 ### Design
@@ -52,11 +43,10 @@ It should use other open-source libraries where possible (perhaps use [`crypto.r
 
 The following features are not necessary for a MVP but would be nice to have as they allow for more interesting things you can (potentially) do with `tio`.
 
-- add nicely formatted console output (and colored)
-- add configuration for specific network (`mainnet` vs `devnet`)
 - add configuration for specific node URLs
 - add support for data types besides strings (basically add file IO, but basic stuff at first - `.txt`, `.json`, etc.)
 - add support to save message result to file
+- add nicely formatted console output (and colored)
 - add `spam` command (this will be good for multi-threading practice)
 - add support for batching broadcasting directory of files
 - add different encryption types ("serious" users will most likely encrypt the data before and after using this tool simply as _just_ a communication tool)
