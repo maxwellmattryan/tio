@@ -53,7 +53,8 @@ It should use other open-source libraries where possible (perhaps use [`crypto.r
 The following features are not necessary for a MVP but would be nice to have as they allow for more interesting things you can (potentially) do with `tio`.
 
 - add nicely formatted console output (and colored)
-- send to / read from specific node URLs
+- add configuration for specific network (`mainnet` vs `devnet`)
+- add configuration for specific node URLs
 - add support for data types besides strings (basically add file IO, but basic stuff at first - `.txt`, `.json`, etc.)
 - add support to save message result to file
 - add `spam` command (this will be good for multi-threading practice)
