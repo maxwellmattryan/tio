@@ -6,7 +6,7 @@ use crate::{
     iota::{ClientArgs, broadcast, init, Network},
 };
 
-fn try_message_from_str(arg: &str) -> Result<String> {
+fn try_data_from_str(arg: &str) -> Result<String> {
     let message = arg.to_string();
     let size = message.as_bytes().len();
 
@@ -19,14 +19,21 @@ fn try_message_from_str(arg: &str) -> Result<String> {
 /// Arguments for the `broadcast` subcommand
 #[derive(Debug, structopt::StructOpt)]
 pub struct BroadcastArgs {
-    /// Data to embed in message payload (must be < 4kb and UTF-8 encoded)
-    #[structopt(
-        parse(try_from_str=try_message_from_str)
-    )]
-    pub message: Option<String>,
+    /// Data to use as the message payload (must be < 4kb and UTF-8 encoded)
+    #[structopt(parse(try_from_str=try_data_from_str))]
+    pub data: Option<String>,
 }
 
-/// `broadcast` subcommand that sends messages on the IOTA Tangle
+impl BroadcastArgs {
+    pub fn unpack_data(&self) -> String {
+        match self.data {
+            Some(ref m) => m.to_string(),
+            None => "TIO_MESSAGE".to_string(),
+        }
+    }
+}
+
+/// `broadcast` subcommand that sends messages to the IOTA Tangle
 #[derive(structopt::StructOpt)]
 pub struct BroadcastCommand {
     #[structopt(flatten)]
@@ -38,19 +45,11 @@ pub struct BroadcastCommand {
 
 #[async_trait]
 impl Command for BroadcastCommand {
-    async fn run(self) -> Result<()> {
-        let network = match self.client.network {
-            Some(ref n) => n,
-            None => &Network::Devnet, // CHANGE BACK TO `Mainnet` later!
-        };
-        init(&network).await;
+    async fn run(&self) -> Result<()> {
+        let n: &Network = self.client.unpack_network();
+        init(n).await;
 
-        let message = match self.broadcast.message {
-            Some(m) => m,
-            None => String::from("TIO_MESSAGE"),
-        };
-        broadcast(&message, &network).await;
-
-        Ok(())
+        let d: &String = &self.broadcast.unpack_data();
+        Ok(broadcast(d, n).await)
     }
 }

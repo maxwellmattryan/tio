@@ -7,7 +7,7 @@ use crate::{
 /// Trait to implement for commands
 #[async_trait]
 pub trait Command {
-    async fn run(self) -> Result<()>;
+    async fn run(&self) -> Result<()>;
 }
 
 /// CLI tool for broadcasting and searching messages on the IOTA Tangle
@@ -20,14 +20,16 @@ pub enum Cli {
     /// Broadcast a message to the IOTA Tangle
     Broadcast(crate::commands::BroadcastCommand),
 
-    // Search,
+    /// Search for a message on the IOTA Tangle
+    Search(crate::commands::SearchCommand),
 }
 
 #[async_trait]
 impl Command for Cli {
-    async fn run(self) -> Result<()> {
+    async fn run(&self) -> Result<()> {
         match self {
             Self::Broadcast(c) => c.run().await,
+            Self::Search(c) => c.run().await,
         }
     }
 }

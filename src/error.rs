@@ -24,7 +24,27 @@ pub enum Error {
     #[error("\"{0}\" is not a valid network")]
     NetworkInvalid(String),
 
+    /// The data within a message is invalid
+    #[error("The data in the message is not valid")]
+    MessageDataInvalid,
+
+    /// There is no data within a message
+    #[error("The message contains no data")]
+    MessageEmpty,
+
+    /// The hash of the message is invalid
+    #[error("\"{0}\" is not a valid message ID hash")]
+    MessageHashInvalid(String),
+
+    /// The message cannot be found given a hash ID
+    #[error("The message cannot be found")]
+    MessageNotFound,
+
     /// The size of the content to send is too large
     #[error("{0} must be < 4kb, found {1} bytes")]
     MessageTooLarge(String, usize),
+
+    /// The payload type of the message is wrong
+    #[error("The message's payload type is wrong (should be Indexation)")]
+    MessageWrongPayload,
 }
