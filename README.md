@@ -53,6 +53,7 @@ It should use other open-source libraries where possible (perhaps use [`crypto.r
 
 The following features are not necessary for a MVP but are important features that I plan on integrating into `tio`.
 
+- copying from / pasting to clipboard
 - abiliy to encrypt / decrypt messages
 - configuration for specific node URLs
 - support for `Transaction` payloads
