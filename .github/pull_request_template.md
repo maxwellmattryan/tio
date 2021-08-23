@@ -2,9 +2,9 @@
 
 Write a concise overview of the PR describing what, why, where, how, etc.
 
-### Changelog
+## Changes
 
-Write readable list of changes (using semanic commit types).
+Write comprehensive and readable list of changes.
 
 ## Notes
 
