@@ -1,6 +1,6 @@
 use std::process::Command;
 
-const BASE_HELP_INFO: &str = "tio 0.1.0
+const BASE_HELP_INFO: &str = "tio 1.0.0
 Matthew Maxwell <maxwellmattryan@gmail.com>
 CLI tool for broadcasting and searching messages on the IOTA Tangle
 
