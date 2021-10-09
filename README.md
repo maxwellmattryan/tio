@@ -49,8 +49,6 @@ It should use other open-source libraries where possible (perhaps use [`crypto.r
 
 ### Roadmap
 - Housekeeping tasks
-  - CI for `rustfmt`
-  - CI for tests
   - CI for building and running
 - Planned features
 - Extra features
