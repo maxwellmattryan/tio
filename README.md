@@ -1,6 +1,6 @@
 # `tio`
 
-[![Format](https://github.com/maxwellmattryan/tio/actions/workflows/ci.fmt.yml/badge.svg?branch=chore%2Frustfmt&event=push)](https://github.com/maxwellmattryan/tio/actions/workflows/ci.fmt.yml)
+[![Format](https://github.com/maxwellmattryan/tio/actions/workflows/ci.fmt.yml/badge.svg?branch=develop&event=push)](https://github.com/maxwellmattryan/tio/actions/workflows/ci.fmt.yml)
 
 ## Overview
 `tio`, short for "Tangle IO", is a CLI tool written in Rust that offers basic messaging broadcasting and searching via the [_IOTA_](https://iota.org) protocol.
