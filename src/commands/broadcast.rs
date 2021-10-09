@@ -39,7 +39,7 @@ pub struct BroadcastArgs {
     #[structopt(parse(try_from_str=try_data_from_str))]
     pub data: Option<String>,
 
-    /// Data index to use in placing the data.
+    /// Data index to use for key indexation.
     #[structopt(parse(try_from_str=try_data_index_from_str))]
     pub data_index: Option<String>,
 }
