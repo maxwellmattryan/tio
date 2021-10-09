@@ -1,0 +1,25 @@
+name: Format
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'develop'
+      - 'main'
+
+jobs:
+  rust:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rustfmt with nightly toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
+
+      - name: Format
+        run: cargo +nightly fmt -- --check
