@@ -1,7 +1,9 @@
 use structopt::StructOpt;
 
-use tio::cli::Command;
-use tio::error::{Error, Result};
+use tio::{
+    cli::Command,
+    error::{Error, Result},
+};
 
 #[tokio::main]
 async fn main() -> Result<()> {

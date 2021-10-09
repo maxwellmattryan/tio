@@ -4,12 +4,12 @@ use async_trait::async_trait;
 use hex::decode;
 
 use crate::{
-    cli::{Command},
+    cli::Command,
     error::{Error, Result},
-    iota::{ClientArgs, init, search, Network},
+    iota::{init, search, ClientArgs, Network},
 };
 
-fn try_hash_from_str(arg: &str) -> Result<String> {  
+fn try_hash_from_str(arg: &str) -> Result<String> {
     let bytes: Vec<u8> = match decode(arg) {
         Ok(b) => b,
         Err(_) => return Err(Error::MessageHashInvalid(arg.to_string())),
@@ -36,7 +36,7 @@ impl SearchArgs {
             Ok(ba) => ba,
             Err(_) => panic!("{:?}", Error::MessageHashInvalid(self.hash.clone())),
         };
-        
+
         *boxed_arr
     }
 }

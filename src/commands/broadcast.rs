@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 
 use crate::{
-    cli::{Command}, 
+    cli::Command,
     error::{Error, Result},
-    iota::{ClientArgs, broadcast, init, Network},
+    iota::{broadcast, init, ClientArgs, Network},
 };
 
 /// The maximum number of bytes allowed for a data message's payload.
@@ -28,7 +28,7 @@ fn try_data_index_from_str(arg: &str) -> Result<String> {
 
     match size {
         s if s < MAX_DATA_INDEX_BYTES => Ok(data_index),
-        _ => Err(Error::MessageDataIndexTooLarge(size))
+        _ => Err(Error::MessageDataIndexTooLarge(size)),
     }
 }
 
@@ -52,7 +52,7 @@ impl BroadcastArgs {
         };
         let data_index = match &self.data_index {
             Some(di) => di.clone(),
-            None => String::from("TIO_DATA")
+            None => String::from("TIO_DATA"),
         };
 
         (data, data_index)
