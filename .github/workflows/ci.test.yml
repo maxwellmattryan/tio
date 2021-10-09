@@ -20,5 +20,5 @@ jobs:
       - uses: actions-rs/cargo@v1
         timeout-minutes: 15
         with:
-          command: tests
+          command: test
           args: --release --all-features
