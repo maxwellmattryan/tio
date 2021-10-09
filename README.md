@@ -44,6 +44,14 @@ This is going to be a fun project learning how to write functional and practical
 I want to focus mainly on the interesting parts, i.e. interacting with the IOTA protocol (using a client library).
 It should use other open-source libraries where possible (perhaps use [`crypto.rs`](https://github.com/iotaledger/crypto.rs) from [iotaledger](https://github.com/iotaledger)).
 
+### Roadmap
+- Housekeeping tasks
+  - CI for `rustfmt`
+  - CI for tests
+  - CI for building and running
+- Planned features
+- Extra features
+
 ### Planned Features
 The following features are not necessary for a MVP but are important features that I plan on integrating into `tio`.
 
