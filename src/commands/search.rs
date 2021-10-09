@@ -21,10 +21,10 @@ fn try_hash_from_str(arg: &str) -> Result<String> {
     }
 }
 
-/// Arguments for the `search` command
+/// Arguments for the `search` command.
 #[derive(Debug, structopt::StructOpt)]
 pub struct SearchArgs {
-    /// Hash of a message (must be hexadecimal string of exactly 32 bytes)
+    /// Hash of a message (must be hexadecimal string of exactly 32 bytes).
     #[structopt(parse(try_from_str=try_hash_from_str))]
     pub hash: String,
 }
@@ -41,7 +41,7 @@ impl SearchArgs {
     }
 }
 
-/// `search` subcommand that finds a message on the IOTA Tangle
+/// `search` subcommand that finds a message on the IOTA Tangle.
 #[derive(structopt::StructOpt)]
 pub struct SearchCommand {
     #[structopt(flatten)]
@@ -54,10 +54,10 @@ pub struct SearchCommand {
 #[async_trait]
 impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
-        let n: &Network = self.client.unpack_network();
-        init(n).await;
+        let network: &Network = self.client.unpack_network();
+        init(network).await;
 
-        let h: &[u8; 32] = &self.search.unpack_hash();
-        Ok(search(h, n).await)
+        let hash: &[u8; 32] = &self.search.unpack_hash();
+        Ok(search(hash, network).await)
     }
 }

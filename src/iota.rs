@@ -8,40 +8,34 @@ use crate::{
     error::{Error, Result},
 };
 
-/// The constant value for `tio`'s data indexation
-const TIO_INDEX: &str = "TIO_INDEX_TEST";
-
-/// The types of available IOTA networks
+/// The types of available IOTA networks.
 #[derive(Debug)]
 pub enum Network {
-    Devnet,
     Mainnet,
-    Testnet,
+    Devnet,
 }
 
 impl Network {
     pub fn url(&self) -> &str {
         match *self {
-            Network::Devnet => "https://api.lb-0.h.chrysalis-devnet.iota.cafe",
             Network::Mainnet => "https://chrysalis-nodes.iota.org",
-            Network::Testnet => "https://api.lb-0.testnet.chrysalis2.com",
+            Network::Devnet => "https://api.lb-0.h.chrysalis-devnet.iota.cafe",
         }
     }
 }
 
 fn try_network_from_str(arg: &str) -> Result<Network> {
     match arg {
-        "d" | "devnet" => Ok(Network::Devnet),
         "m" | "mainnet" => Ok(Network::Mainnet),
-        "t" | "testnet" => Ok(Network::Testnet),
+        "d" | "devnet" => Ok(Network::Devnet),
         _ => Err(Error::NetworkInvalid(arg.to_string())),
     }
 }
 
-/// Arguments for client configuration
+/// Arguments for client configuration.
 #[derive(Debug, structopt::StructOpt)]
 pub struct ClientArgs {
-    /// IOTA Tangle network to use ("mainnet", "devnet", and "testnet")
+    /// IOTA Tangle network to use ("mainnet" and "devnet").
     #[structopt(short, long, parse(try_from_str=try_network_from_str))]
     pub network: Option<Network>,
 }
@@ -50,7 +44,7 @@ impl ClientArgs {
     pub fn unpack_network(&self) -> &Network {
         match self.network {
             Some(ref n) => n,
-            None => &Network::Testnet, // Change back to `Mainnet` after first "release"
+            None => &Network::Devnet,
         }
     }
 }
@@ -66,7 +60,7 @@ async fn build_client(network: &Network) -> Client {
         }
 }
 
-/// Initialize a client <-> node connection
+/// Initialize a client <-> node connection.
 pub async fn init(network: &Network) {
     let iota = build_client(network).await;
     match iota.get_info().await {
@@ -75,15 +69,15 @@ pub async fn init(network: &Network) {
     }
 }
 
-/// Broadcast a message with given data to a specific IOTA network 
-pub async fn broadcast(data: &String, network: &Network) {
+/// Broadcast a message with given data to a specific IOTA network.
+pub async fn broadcast(data: &String, data_index: &String, network: &Network) {
     let size = data.as_bytes().len();
-    println!("CONTENT: \"{}\"\nSIZE: {} byte(s)\n", data, size);
+    println!("CONTENT: \"{}\"\nINDEX: \"{}\"\nSIZE: {} byte(s)\n", data, data_index, size);
 
     let iota = build_client(network).await;
     let m = match iota
         .message()
-        .with_index(TIO_INDEX)
+        .with_index(data_index)
         .with_data(data.as_bytes().to_vec())
         .finish()
         .await {
@@ -94,7 +88,7 @@ pub async fn broadcast(data: &String, network: &Network) {
     println!("HASH: {}\n", m.id().0);
 }
 
-/// Search for a message on a specified IOTA network given its hash ID
+/// Search for a message on a specified IOTA network given its hash ID.
 pub async fn search(hash: &[u8; 32], network: &Network) {
     let id = MessageId::new(*hash);
     let iota = build_client(network).await;

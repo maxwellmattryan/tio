@@ -11,6 +11,8 @@ async-trait = "0.1.51"
 futures = "0.3"
 hex = "0.4"
 iota-client = { git = "https://github.com/iotaledger/iota.rs", branch = "dev" }
+rand = "0.8"
+rsa = "0.5"
 structopt = { version = "0.3", default-features = false }
 thiserror = "1.0"
 tokio = { version = "1", features = ["full"] }
