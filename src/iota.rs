@@ -6,7 +6,7 @@ use iota_client::{
 use crate::error::{Error, Result};
 
 /// The types of available IOTA networks.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Network {
     Mainnet,
     Devnet,
@@ -50,15 +50,6 @@ async fn build_client(network: &Network) -> Client {
     match Client::builder().with_node(network.url()).unwrap().finish().await {
         Ok(c) => c,
         Err(_) => panic!("{:?}", Error::CannotBuildNodeClient),
-    }
-}
-
-/// Initialize a client <-> node connection.
-pub async fn init(network: &Network) {
-    let iota = build_client(network).await;
-    match iota.get_info().await {
-        Ok(i) => println!("NODE_INFO: {:#?}\n", &i.nodeinfo),
-        Err(_) => panic!("{:?}", Error::CannotGetNodeInfo),
     }
 }
 
@@ -109,4 +100,24 @@ pub async fn search(hash: &[u8; 32], network: &Network) {
 
     let size = string.as_bytes().len();
     println!("CONTENT: {:#?}\nSIZE: {} byte(s)\n", string, size);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_try_network_from_str() {
+        let mainnet = Network::Mainnet;
+        let devnet = Network::Devnet;
+        let error = Error::NetworkInvalid(String::from(""));
+
+        assert_eq!(mainnet, try_network_from_str("m").unwrap());
+        assert_eq!(mainnet, try_network_from_str("mainnet").unwrap());
+
+        assert_eq!(devnet, try_network_from_str("d").unwrap());
+        assert_eq!(devnet, try_network_from_str("devnet").unwrap());
+
+        assert_eq!(error, try_network_from_str("").unwrap_err());
+    }
 }

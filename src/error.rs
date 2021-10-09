@@ -2,7 +2,7 @@
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Error types for `tio`.
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, PartialEq, thiserror::Error)]
 pub enum Error {
     /// The message is unable to be broadcasted.
     #[error("Unable to broadcast message")]

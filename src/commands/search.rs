@@ -6,7 +6,7 @@ use hex::decode;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{init, search, ClientArgs, Network},
+    iota::{search, ClientArgs, Network},
 };
 
 fn try_hash_from_str(arg: &str) -> Result<String> {
@@ -55,9 +55,27 @@ pub struct SearchCommand {
 impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
         let network: &Network = self.client.unpack_network();
-        init(network).await;
 
         let hash: &[u8; 32] = &self.search.unpack_hash();
         Ok(search(hash, network).await)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_try_hash_from_str() {
+        fn error_fn(s: &str) -> Error {
+            Error::MessageHashInvalid(String::from(s))
+        }
+        let bad_hash = "THIS_IS_A_BAD_HASH";
+        let half_hash = "9d097abc7abef5c51f31a33655f3f15e";
+        let good_hash = "9d097abc7abef5c51f31a33655f3f15e100d4634f930a07ebbcfe3f0ab98b620";
+
+        assert_eq!(error_fn(bad_hash), try_hash_from_str(bad_hash).unwrap_err());
+        assert_eq!(error_fn(half_hash), try_hash_from_str(half_hash).unwrap_err());
+        assert_eq!(good_hash, try_hash_from_str(good_hash).unwrap());
     }
 }

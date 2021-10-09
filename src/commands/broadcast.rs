@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{broadcast, init, ClientArgs, Network},
+    iota::{broadcast, ClientArgs, Network},
 };
 
 /// The maximum number of bytes allowed for a data message's payload.
@@ -39,7 +39,7 @@ pub struct BroadcastArgs {
     #[structopt(parse(try_from_str=try_data_from_str))]
     pub data: Option<String>,
 
-    /// Data index to use in placing the data.
+    /// Data index to use for key indexation.
     #[structopt(parse(try_from_str=try_data_index_from_str))]
     pub data_index: Option<String>,
 }
@@ -73,9 +73,28 @@ pub struct BroadcastCommand {
 impl Command for BroadcastCommand {
     async fn run(&self) -> Result<()> {
         let network: &Network = self.client.unpack_network();
-        init(network).await;
 
         let (data, data_index) = &self.broadcast.unpack_args();
         Ok(broadcast(data, data_index, network).await)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_try_data_from_str() {
+        let valid_data: &str = "This is valid data.";
+        assert_eq!(String::from(valid_data), try_data_from_str(valid_data).unwrap());
+    }
+
+    #[test]
+    fn test_try_data_index_from_str() {
+        let valid_data_index: &str = "This is a valid data index.";
+        assert_eq!(
+            String::from(valid_data_index),
+            try_data_index_from_str(valid_data_index).unwrap()
+        );
     }
 }
