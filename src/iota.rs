@@ -1,12 +1,9 @@
 use iota_client::{
-    Client, bee_message::{
-        MessageId, payload::Payload, prelude::IndexationPayload
-    }
+    bee_message::{payload::Payload, prelude::IndexationPayload, MessageId},
+    Client,
 };
 
-use crate::{
-    error::{Error, Result},
-};
+use crate::error::{Error, Result};
 
 /// The types of available IOTA networks.
 #[derive(Debug)]
@@ -50,14 +47,10 @@ impl ClientArgs {
 }
 
 async fn build_client(network: &Network) -> Client {
-    match Client::builder()
-        .with_node(network.url())
-        .unwrap()
-        .finish()
-        .await {
-            Ok(c) => c,
-            Err(_) => panic!("{:?}", Error::CannotBuildNodeClient) ,
-        }
+    match Client::builder().with_node(network.url()).unwrap().finish().await {
+        Ok(c) => c,
+        Err(_) => panic!("{:?}", Error::CannotBuildNodeClient),
+    }
 }
 
 /// Initialize a client <-> node connection.
@@ -72,7 +65,10 @@ pub async fn init(network: &Network) {
 /// Broadcast a message with given data to a specific IOTA network.
 pub async fn broadcast(data: &String, data_index: &String, network: &Network) {
     let size = data.as_bytes().len();
-    println!("CONTENT: \"{}\"\nINDEX: \"{}\"\nSIZE: {} byte(s)\n", data, data_index, size);
+    println!(
+        "CONTENT: \"{}\"\nINDEX: \"{}\"\nSIZE: {} byte(s)\n",
+        data, data_index, size
+    );
 
     let iota = build_client(network).await;
     let m = match iota
@@ -80,10 +76,11 @@ pub async fn broadcast(data: &String, data_index: &String, network: &Network) {
         .with_index(data_index)
         .with_data(data.as_bytes().to_vec())
         .finish()
-        .await {
-            Ok(m) => m,
-            Err(_) => panic!("{:?}", Error::CannotBroadcastMessage),
-        };
+        .await
+    {
+        Ok(m) => m,
+        Err(_) => panic!("{:?}", Error::CannotBroadcastMessage),
+    };
 
     println!("HASH: {}\n", m.id().0);
 }
