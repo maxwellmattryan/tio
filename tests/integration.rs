@@ -36,12 +36,14 @@ USAGE:
 For more information try --help
 ";
 
-const BASE_BROADCAST_OUTPUT: &str = "INDEX: \"tio-cli\"
-DATA: \"tio-message\"
+const BASE_BROADCAST_OUTPUT: &str = "Index: tio-cli
+Data: tio-message
+Size: 11 byte(s)
 ";
 
-const OTHER_BROADCAST_OUTPUT: &str = "INDEX: \"tio-cli-test\"
-DATA: \"tio-message-test\"
+const OTHER_BROADCAST_OUTPUT: &str = "Index: tio-cli-test
+Data: tio-message-test
+Size: 16 byte(s)
 ";
 
 const BASE_SEARCH_OUTPUT: &str = BASE_BROADCAST_OUTPUT;
@@ -98,7 +100,7 @@ mod integration {
         let output = Command::new("./target/release/tio")
             .args([
                 "search",
-                "e8c0d22efcfcfb142fd5c6862e0ef6cfae4a42a5f442913785348f36a2b94a40",
+                "830e3f2aeb7409b27683480e6edd0fe6c1f3c503486c31b5df5a0472b395433d",
             ])
             .output()
             .expect("failed to search for message");

@@ -27,7 +27,17 @@ pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
     };
 
     let size = data.as_bytes().len();
-    println!("INDEX: \"{}\"\nDATA: \"{}\"\nSIZE: {} byte(s)\nID: {}", index, data, size, m.id().0);
+    println!(
+        "--- Broadcast Result ---\n\
+        ID: {}\n\
+        Index: {}\n\
+        Data: {}\n\
+        Size: {} byte(s)",
+        m.id().0,
+        index,
+        data,
+        size,
+    )
 }
 
 /// Search for a message on a specified IOTA network given its hash ID.
@@ -57,7 +67,15 @@ pub async fn find_message(message_id: &[u8; 32], node_url: &str) {
     };
 
     let size = string.as_bytes().len();
-    println!("INDEX: \"{}\"\nDATA: {:#?}\nSIZE: {} byte(s)", index, string, size);
+    println!(
+        "--- Search Result ---\n\
+        Index: {}\n\
+        Data: {}\n\
+        Size: {} byte(s)",
+        index,
+        string,
+        size,
+    )
 }
 
 /// Query a node for its network information.
@@ -87,7 +105,7 @@ pub async fn get_info(node_url: &str) {
         URL: {}\n\
         Software: {} {}\n\
         Stats: {:.1} MPS @ {:.2}%\n\
-        Latest milestone: {} @ {}",
+        Milestones: No. {} @ {}",
         network_info.network_id.unwrap(),
         network_info.bech32_hrp,
         node_info.url,
