@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{broadcast, ClientArgs, Network},
+    iota::{broadcast_message, client::ClientArgs},
 };
 
 /// The maximum number of bytes allowed for a data message's index.
@@ -45,14 +45,14 @@ pub struct BroadcastArgs {
 }
 
 impl BroadcastArgs {
-    pub fn unpack_args(&self) -> (String, String) {
+    pub fn unpack_args(&self) -> (&str, &str) {
         let index = match &self.index {
-            Some(i) => i.clone(),
-            None => String::from("TIO_DATA"),
+            Some(i) => i.as_str(),
+            None => "tio-cli",
         };
         let data = match &self.data {
-            Some(d) => d.clone(),
-            None => String::from("TIO_MESSAGE"),
+            Some(d) => d.as_str(),
+            None => "tio-message",
         };
 
         (index, data)
@@ -72,10 +72,10 @@ pub struct BroadcastCommand {
 #[async_trait]
 impl Command for BroadcastCommand {
     async fn run(&self) -> Result<()> {
-        let network: &Network = self.client.unpack_network();
+        let (index, data) = self.broadcast.unpack_args();
+        let node_url = self.client.unpack_url();
 
-        let (index, data) = &self.broadcast.unpack_args();
-        Ok(broadcast(index, data, network).await)
+        Ok(broadcast_message(index, data, node_url).await)
     }
 }
 

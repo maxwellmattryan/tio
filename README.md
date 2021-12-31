@@ -26,9 +26,9 @@ The IOTA ledger refers to all value-based messages.
 ### Enhancements
 - Clipboard copying (IDs, messages, transactions, data, etc.)
 - Better logging and output formatting (indexation, coloring, etc.)
+- Better message formatting on `broadcast` (string-ify JSON data)
 - More arguments for commands:
-    - Randomizing node selection
-    - Parameterizing client options (node URLs and authentication, networks)
+    - Node authentication (username, password, and JWT)
     - Specify activity to watch for with `monitor`
     - Time interval between `spam` messages
 - Data encryption / decryption including algorithm selection

@@ -12,9 +12,17 @@ pub enum Error {
     #[error("Unable to build client for node")]
     CannotBuildNodeClient,
 
+    /// The network information is unable to be retrieved from node.
+    #[error("Unable to retrieve the network information from node")]
+    CannotGetNetworkInfo,
+
     /// The node information is unable to be retrieved.
     #[error("Unable to retrieve the node information")]
     CannotGetNodeInfo,
+
+    /// The node URL is invalid.
+    #[error("Unable to parse the node URL")]
+    CannotParseNodeUrl,
 
     /// An (unknown) error occurred when executing some command.
     #[error("Something went wrong")]
@@ -24,9 +32,13 @@ pub enum Error {
     #[error("\"{0}\" is not a valid network")]
     NetworkInvalid(String),
 
-    /// The data within a message is invalid.
+    /// The data within a message's indexation payload is invalid.
     #[error("The data in the message is not valid")]
     MessageDataInvalid,
+
+    /// The index within a message's indexation payload is invalid.
+    #[error("The index in the message data is not valid")]
+    MessageDataIndexInvalid,
 
     /// There is no data within a message.
     #[error("The message contains no data")]

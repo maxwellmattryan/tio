@@ -18,6 +18,9 @@ pub enum Cli {
     /// Broadcast a message to the IOTA Tangle.
     Broadcast(crate::commands::BroadcastCommand),
 
+    /// Query for node information on the IOTA Tangle.
+    Info(crate::commands::InfoCommand),
+
     /// Search for a message on the IOTA Tangle.
     Search(crate::commands::SearchCommand),
 }
@@ -27,6 +30,7 @@ impl Command for Cli {
     async fn run(&self) -> Result<()> {
         match self {
             Self::Broadcast(c) => c.run().await,
+            Self::Info(c) => c.run().await,
             Self::Search(c) => c.run().await,
         }
     }

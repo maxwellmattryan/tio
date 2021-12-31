@@ -14,6 +14,7 @@ FLAGS:
 SUBCOMMANDS:
     broadcast    Broadcast a message to the IOTA Tangle
     help         Prints this message or the help of the given subcommand(s)
+    info         Query for node information on the IOTA Tangle
     search       Search for a message on the IOTA Tangle
 ";
 
@@ -35,19 +36,17 @@ USAGE:
 For more information try --help
 ";
 
-const BASE_BROADCAST_OUTPUT: &str = "INDEX: \"TIO_DATA\"
-CONTENT: \"TIO_MESSAGE\"
-SIZE: 11 byte(s)
+const BASE_BROADCAST_OUTPUT: &str = "Index: tio-cli
+Data: tio-message
+Size: 11 byte(s)
 ";
 
-const OTHER_BROADCAST_OUTPUT: &str = "INDEX: \"TIO_INTEGRATION_TEST_INDEX\"
-CONTENT: \"TIO_INTEGRATION_TEST_DATA\"
-SIZE: 25 byte(s)
+const OTHER_BROADCAST_OUTPUT: &str = "Index: tio-cli-test
+Data: tio-message-test
+Size: 16 byte(s)
 ";
 
-const BASE_SEARCH_OUTPUT: &str = "CONTENT: \"TIO_INTEGRATION_TEST_DATA\"
-SIZE: 25 byte(s)
-";
+const BASE_SEARCH_OUTPUT: &str = BASE_BROADCAST_OUTPUT;
 
 mod integration {
     use super::*;
@@ -81,7 +80,7 @@ mod integration {
     #[test]
     fn test_call_broadcast_with_args() {
         let output = Command::new("./target/release/tio")
-            .args(["broadcast", "TIO_INTEGRATION_TEST_INDEX", "TIO_INTEGRATION_TEST_DATA"])
+            .args(["broadcast", "tio-cli-test", "tio-message-test"])
             .output()
             .expect("failed to broadcast message");
         assert!(String::from_utf8_lossy(&output.stdout).contains(OTHER_BROADCAST_OUTPUT))
@@ -101,7 +100,7 @@ mod integration {
         let output = Command::new("./target/release/tio")
             .args([
                 "search",
-                "26654922eae987d62ca7f2bb914345694be7303fea338dd104338ce8ed3525c6",
+                "830e3f2aeb7409b27683480e6edd0fe6c1f3c503486c31b5df5a0472b395433d",
             ])
             .output()
             .expect("failed to search for message");

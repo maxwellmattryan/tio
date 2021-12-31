@@ -6,7 +6,7 @@ use hex::decode;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{search, ClientArgs, Network},
+    iota::{client::ClientArgs, find_message},
 };
 
 fn try_hash_from_str(arg: &str) -> Result<String> {
@@ -54,10 +54,10 @@ pub struct SearchCommand {
 #[async_trait]
 impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
-        let network: &Network = self.client.unpack_network();
-
         let id: &[u8; 32] = &self.search.unpack_hash();
-        Ok(search(id, network).await)
+        let node_url = self.client.unpack_url();
+
+        Ok(find_message(id, node_url).await)
     }
 }
 
