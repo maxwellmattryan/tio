@@ -54,17 +54,17 @@ async fn build_client(network: &Network) -> Client {
 }
 
 /// Broadcast a message with given data to a specific IOTA network.
-pub async fn broadcast(data: &String, data_index: &String, network: &Network) {
+pub async fn broadcast(index: &String, data: &String, network: &Network) {
     let size = data.as_bytes().len();
     println!(
         "CONTENT: \"{}\"\nINDEX: \"{}\"\nSIZE: {} byte(s)\n",
-        data, data_index, size
+        data, index, size
     );
 
     let iota = build_client(network).await;
     let m = match iota
         .message()
-        .with_index(data_index)
+        .with_index(index)
         .with_data(data.as_bytes().to_vec())
         .finish()
         .await
@@ -77,8 +77,8 @@ pub async fn broadcast(data: &String, data_index: &String, network: &Network) {
 }
 
 /// Search for a message on a specified IOTA network given its hash ID.
-pub async fn search(hash: &[u8; 32], network: &Network) {
-    let id = MessageId::new(*hash);
+pub async fn search(message_id: &[u8; 32], network: &Network) {
+    let id = MessageId::new(*message_id);
     let iota = build_client(network).await;
 
     let message = match iota.get_message().data(&id).await {

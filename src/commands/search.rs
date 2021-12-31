@@ -26,15 +26,15 @@ fn try_hash_from_str(arg: &str) -> Result<String> {
 pub struct SearchArgs {
     /// Hash of a message (must be hexadecimal string of exactly 32 bytes).
     #[structopt(parse(try_from_str=try_hash_from_str))]
-    pub hash: String,
+    pub id: String,
 }
 
 impl SearchArgs {
     pub fn unpack_hash(&self) -> [u8; 32] {
-        let boxed = decode(&self.hash).unwrap().into_boxed_slice();
+        let boxed = decode(&self.id).unwrap().into_boxed_slice();
         let boxed_arr: Box<[u8; 32]> = match boxed.try_into() {
             Ok(ba) => ba,
-            Err(_) => panic!("{:?}", Error::MessageHashInvalid(self.hash.clone())),
+            Err(_) => panic!("{:?}", Error::MessageHashInvalid(self.id.clone())),
         };
 
         *boxed_arr
@@ -56,8 +56,8 @@ impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
         let network: &Network = self.client.unpack_network();
 
-        let hash: &[u8; 32] = &self.search.unpack_hash();
-        Ok(search(hash, network).await)
+        let id: &[u8; 32] = &self.search.unpack_hash();
+        Ok(search(id, network).await)
     }
 }
 
@@ -70,12 +70,12 @@ mod tests {
         fn error_fn(s: &str) -> Error {
             Error::MessageHashInvalid(String::from(s))
         }
-        let bad_hash = "THIS_IS_A_BAD_HASH";
-        let half_hash = "9d097abc7abef5c51f31a33655f3f15e";
-        let good_hash = "9d097abc7abef5c51f31a33655f3f15e100d4634f930a07ebbcfe3f0ab98b620";
+        let bad_id = "THIS_IS_A_BAD_HASH";
+        let half_id = "9d097abc7abef5c51f31a33655f3f15e";
+        let good_id = "9d097abc7abef5c51f31a33655f3f15e100d4634f930a07ebbcfe3f0ab98b620";
 
-        assert_eq!(error_fn(bad_hash), try_hash_from_str(bad_hash).unwrap_err());
-        assert_eq!(error_fn(half_hash), try_hash_from_str(half_hash).unwrap_err());
-        assert_eq!(good_hash, try_hash_from_str(good_hash).unwrap());
+        assert_eq!(error_fn(bad_id), try_hash_from_str(bad_id).unwrap_err());
+        assert_eq!(error_fn(half_id), try_hash_from_str(half_id).unwrap_err());
+        assert_eq!(good_id, try_hash_from_str(good_id).unwrap());
     }
 }

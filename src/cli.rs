@@ -8,7 +8,7 @@ pub trait Command {
     async fn run(&self) -> Result<()>;
 }
 
-/// CLI tool for broadcasting and searching messages on the IOTA Tangle.
+/// CLI tool for interacting with the IOTA Tangle.
 #[derive(structopt::StructOpt)]
 #[structopt(
     author = "Matthew Maxwell <maxwellmattryan@gmail.com>", 

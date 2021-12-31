@@ -3,59 +3,37 @@
 [![Test](https://github.com/maxwellmattryan/tio/actions/workflows/ci.test.yml/badge.svg?branch=develop&event=push)](https://github.com/maxwellmattryan/tio/actions/workflows/ci.test.yml)
 
 ## Overview
-`tio`, short for "Tangle IO", is a CLI tool written in Rust that offers basic messaging broadcasting and searching via the [_IOTA_](https://iota.org) protocol.
+`tio`, short for "Tangle IO", is a CLI tool that offers fast and easy-to-use interaction with the [IOTA](https://iota.org) Tangle.
+
+## Build
+Please refer to the [build documentation](./docs/BUILD.md) for details information on how to build `tio`.
 
 ## Usage
-- Broadcasting a message to the Tangle:
-```bash
-USAGE:
-    tio broadcast [OPTIONS] [ARGS]
+Please refer to the [usage documentation](./docs/USAGE.md) for detailed information on how to use `tio`.
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
+## Roadmap
+Each list below is ordered in terms of priority (higher position = higher priority).
 
-OPTIONS:
-    -n, --network <network>    IOTA Tangle network to use ("mainnet" and "devnet")
+### Features
+- `info` command (queries the node information (`api/v1/info` endpoint) of an IOTA node)
+- `monitor` command (watches a given address for updates in the IOTA ledger*)
+- `spam` command (repeatedly sends a data message to the IOTA Tangle)
 
-ARGS:
-    <data>          Data to use as the message payload (must be < 4kb and UTF-8 encoded)
-    <data-index>    Data index to use for key indexation
-```
+\* It is worth noting that the IOTA ledger and the IOTA Tangle are __not the same thing__.
+The Tangle contains all messages regardless of whether or not they are data- or value-based.
+The IOTA ledger refers to all value-based messages.
 
-- Searching for message on the Tangle:
-```bash
-USAGE:
-    tio search [OPTIONS] <hash>
-
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
-
-OPTIONS:
-    -n, --network <network>    IOTA Tangle network to use ("mainnet" and "devnet")
-
-ARGS:
-    <hash>    Hash of a message (must be hexadecimal string of exactly 32 bytes)
-```
-
-## Planning
-I have never written a _actual_ Rust tool, program, i.e. anything. 
-This is going to be a fun project learning how to write functional and practical Rust using the IOTA protocol, which I have an interest in.
-
-### Design
-`tio` should be fast (no reason _not_ to be) with minimal overhead.  
-I want to focus mainly on the interesting parts, i.e. interacting with the IOTA protocol (using a client library).
-It should use other open-source libraries where possible (perhaps use [`crypto.rs`](https://github.com/iotaledger/crypto.rs) from [iotaledger](https://github.com/iotaledger)).
-
-### Roadmap
-- `spam` command: repeatedly sends a data message to the IOTA Tangle
-- `monitor` command: watches a given address for updates in the IOTA ledger
-- Copying (message and transaction IDs)
-
-### Extra Features
-- Nicely formatted console output (+ colors)
-- Configuration for specific node URLs
-- Ability to encrypt / decrypt messages (+ different encryption algorithms)
-- Non-string data types (basically add file IO, but basic stuff at first - `.txt`, `.json`, etc.)
+### Enhancements
+- Clipboard copying (IDs, messages, transactions, data, etc.)
+- Better logging and output formatting (indexation, coloring, etc.)
+- More arguments for commands:
+    - Randomizing node selection
+    - Parameterizing client options (node URLs and authentication, networks)
+    - Specify activity to watch for with `monitor`
+    - Time interval between `spam` messages
+- Data encryption / decryption including algorithm selection
+- Broadcasting non-string data (file inputs to start, may use hash of file contents instead)
 - Batch broadcasting and searching of messages
+
+### Fixes
+_None_
