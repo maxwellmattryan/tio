@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 async-trait = "0.1.51"
+chrono = "0.4.0"
 futures = "0.3"
 hex = "0.4"
 iota-client = { git = "https://github.com/iotaledger/iota.rs", branch = "dev" }

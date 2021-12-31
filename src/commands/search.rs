@@ -57,9 +57,8 @@ pub struct SearchCommand {
 #[async_trait]
 impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
-        let node_url = self.client.unpack_url();
-        println!("SEARCH URL: {}", node_url);
         let id: &[u8; 32] = &self.search.unpack_hash();
+        let node_url = self.client.unpack_url();
 
         Ok(find_message(id, node_url).await)
     }

@@ -1,3 +1,4 @@
+use chrono::{DateTime, NaiveDateTime, Utc};
 use iota_client::bee_message::{
     payload::Payload,
     prelude::IndexationPayload,
@@ -72,12 +73,18 @@ pub async fn get_info(node_url: &str) {
         Err(_) => panic!("{:?}", Error::CannotGetNodeInfo),
     };
 
+    let timestamp = node_info.nodeinfo.latest_milestone_timestamp.to_string().as_str().parse::<i64>().unwrap();
+    let datetime: DateTime<Utc> = DateTime::from_utc(
+        NaiveDateTime::from_timestamp(timestamp, 0),
+        Utc
+    );
+
     println!(
         "Network ID: {}\n\
         Bech32 HRP: {}\n\
         Software: {} {}\n\
         URL: {}\n\
-        Stats: {}mps @ {:.2}%\n\
+        Stats: {:.1} MPS @ {:.2}%\n\
         Latest milestone: {} @ {}",
         network_info.network_id.unwrap(),
         network_info.bech32_hrp,
@@ -87,6 +94,6 @@ pub async fn get_info(node_url: &str) {
         node_info.nodeinfo.referenced_messages_per_second,
         node_info.nodeinfo.referenced_rate,
         node_info.nodeinfo.latest_milestone_index,
-        node_info.nodeinfo.latest_milestone_timestamp,
+        datetime.format("%Y-%m-%d %H:%M:%S"),
     );
 }

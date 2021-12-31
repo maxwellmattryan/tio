@@ -20,7 +20,6 @@ pub struct InfoCommand {
 impl Command for InfoCommand {
     async fn run(&self) -> Result<()> {
         let node_url = self.client.unpack_url();
-        println!("INFO URL: {}", node_url);
 
         Ok(get_info(node_url).await)
     }

@@ -75,9 +75,8 @@ pub struct BroadcastCommand {
 #[async_trait]
 impl Command for BroadcastCommand {
     async fn run(&self) -> Result<()> {
-        let node_url = self.client.unpack_url();
-        println!("BROADCAST URL: {}", node_url);
         let (index, data) = self.broadcast.unpack_args();
+        let node_url = self.client.unpack_url();
 
         Ok(broadcast_message(index, data, node_url).await)
     }
