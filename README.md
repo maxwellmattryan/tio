@@ -1,5 +1,4 @@
 # `tio`
-
 [![Format](https://github.com/maxwellmattryan/tio/actions/workflows/ci.format.yml/badge.svg?branch=develop&event=push)](https://github.com/maxwellmattryan/tio/actions/workflows/ci.format.yml)
 [![Test](https://github.com/maxwellmattryan/tio/actions/workflows/ci.test.yml/badge.svg?branch=develop&event=push)](https://github.com/maxwellmattryan/tio/actions/workflows/ci.test.yml)
 
@@ -49,18 +48,14 @@ This is going to be a fun project learning how to write functional and practical
 I want to focus mainly on the interesting parts, i.e. interacting with the IOTA protocol (using a client library).
 It should use other open-source libraries where possible (perhaps use [`crypto.rs`](https://github.com/iotaledger/crypto.rs) from [iotaledger](https://github.com/iotaledger)).
 
-### Planned Features
-The following features are not necessary for a MVP but are important features that I plan on integrating into `tio`.
-
-- copying from / pasting to clipboard
-- ability to save message result to file
-- `spam` command (this will be good for multi-threading practice)
+### Roadmap
+- `spam` command: repeatedly sends a data message to the IOTA Tangle
+- `monitor` command: watches a given address for updates in the IOTA ledger
+- Copying (message and transaction IDs)
 
 ### Extra Features
-The following features are unnecessary, but would allow for more interesting things to do with `tio`.
-
-- add nicely formatted console output (+ colors)
-- configuration for specific node URLs
-- ability to encrypt / decrypt messages (+ different encryption algorithms)
-- non-string data types (basically add file IO, but basic stuff at first - `.txt`, `.json`, etc.)
-- batch broadcasting and searching of messages
+- Nicely formatted console output (+ colors)
+- Configuration for specific node URLs
+- Ability to encrypt / decrypt messages (+ different encryption algorithms)
+- Non-string data types (basically add file IO, but basic stuff at first - `.txt`, `.json`, etc.)
+- Batch broadcasting and searching of messages
