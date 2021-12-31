@@ -3,10 +3,7 @@ use async_trait::async_trait;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{
-        broadcast_message,
-        client::{ClientArgs},
-    },
+    iota::{broadcast_message, client::ClientArgs},
 };
 
 /// The maximum number of bytes allowed for a data message's index.

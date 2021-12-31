@@ -3,10 +3,7 @@ use async_trait::async_trait;
 use crate::{
     cli::Command,
     error::Result,
-    iota::{
-        client::{ClientArgs},
-        get_info,
-    },
+    iota::{client::ClientArgs, get_info},
 };
 
 /// `info` subcommand that queries for node information.

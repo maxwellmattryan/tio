@@ -77,11 +77,11 @@ impl ClientArgs {
                 assert!(u.scheme() == "http" || u.scheme() == "https");
 
                 u.as_str()
-            },
+            }
             None => match self.network {
                 Some(ref n) => n.url(),
                 None => Network::ChrysalisDevnet.url(),
-            }
+            },
         }
     }
 }

@@ -6,10 +6,7 @@ use hex::decode;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{
-        client::{ClientArgs},
-        find_message,
-    },
+    iota::{client::ClientArgs, find_message},
 };
 
 fn try_hash_from_str(arg: &str) -> Result<String> {

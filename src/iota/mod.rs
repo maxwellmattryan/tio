@@ -1,14 +1,7 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
-use iota_client::bee_message::{
-    payload::Payload,
-    prelude::IndexationPayload,
-    MessageId,
-};
+use iota_client::bee_message::{payload::Payload, prelude::IndexationPayload, MessageId};
 
-use crate::{
-    error::Error,
-    iota::client::{build_client},
-};
+use crate::{error::Error, iota::client::build_client};
 
 pub mod client;
 
@@ -72,9 +65,7 @@ pub async fn find_message(message_id: &[u8; 32], node_url: &str) {
         Index: {}\n\
         Data: {}\n\
         Size: {} byte(s)",
-        index,
-        string,
-        size,
+        index, string, size,
     )
 }
 
@@ -91,11 +82,14 @@ pub async fn get_info(node_url: &str) {
         Err(_) => panic!("{:?}", Error::CannotGetNodeInfo),
     };
 
-    let timestamp = node_info.nodeinfo.latest_milestone_timestamp.to_string().as_str().parse::<i64>().unwrap();
-    let datetime: DateTime<Utc> = DateTime::from_utc(
-        NaiveDateTime::from_timestamp(timestamp, 0),
-        Utc
-    );
+    let timestamp = node_info
+        .nodeinfo
+        .latest_milestone_timestamp
+        .to_string()
+        .as_str()
+        .parse::<i64>()
+        .unwrap();
+    let datetime: DateTime<Utc> = DateTime::from_utc(NaiveDateTime::from_timestamp(timestamp, 0), Utc);
 
     println!(
         "--- Network Info ---\n\
