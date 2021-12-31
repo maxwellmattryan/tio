@@ -80,17 +80,19 @@ pub async fn get_info(node_url: &str) {
     );
 
     println!(
-        "Network ID: {}\n\
+        "--- Network Info ---\n\
+        ID: {}\n\
         Bech32 HRP: {}\n\
-        Software: {} {}\n\
+        \n--- Node Info ---\n\
         URL: {}\n\
+        Software: {} {}\n\
         Stats: {:.1} MPS @ {:.2}%\n\
         Latest milestone: {} @ {}",
         network_info.network_id.unwrap(),
         network_info.bech32_hrp,
+        node_info.url,
         node_info.nodeinfo.name,
         node_info.nodeinfo.version,
-        node_info.url,
         node_info.nodeinfo.referenced_messages_per_second,
         node_info.nodeinfo.referenced_rate,
         node_info.nodeinfo.latest_milestone_index,

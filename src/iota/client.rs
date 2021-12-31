@@ -73,7 +73,11 @@ impl ClientArgs {
 
     pub fn unpack_url(&self) -> &str {
         match self.url {
-            Some(ref u) => u.as_str(),
+            Some(ref u) => {
+                assert!(u.scheme() == "http" || u.scheme() == "https");
+
+                u.as_str()
+            },
             None => match self.network {
                 Some(ref n) => n.url(),
                 None => Network::ChrysalisDevnet.url(),
