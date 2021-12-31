@@ -56,10 +56,7 @@ async fn build_client(network: &Network) -> Client {
 /// Broadcast a message with given data to a specific IOTA network.
 pub async fn broadcast(index: &String, data: &String, network: &Network) {
     let size = data.as_bytes().len();
-    println!(
-        "INDEX: \"{}\"\nCONTENT: \"{}\"\nSIZE: {} byte(s)\n",
-        index, data, size
-    );
+    println!("INDEX: \"{}\"\nCONTENT: \"{}\"\nSIZE: {} byte(s)\n", index, data, size);
 
     let iota = build_client(network).await;
     let m = match iota

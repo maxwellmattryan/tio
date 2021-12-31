@@ -86,10 +86,7 @@ mod tests {
     #[test]
     fn test_try_index_from_str() {
         let valid_index: &str = "This is a valid index.";
-        assert_eq!(
-            String::from(valid_index),
-            try_data_index_from_str(valid_index).unwrap()
-        );
+        assert_eq!(String::from(valid_index), try_data_index_from_str(valid_index).unwrap());
     }
 
     #[test]

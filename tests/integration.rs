@@ -17,7 +17,8 @@ SUBCOMMANDS:
     search       Search for a message on the IOTA Tangle
 ";
 
-const INVALID_COMMAND: &str = "error: Found argument 'bad-command' which wasn't expected, or isn't valid in this context
+const INVALID_COMMAND: &str =
+    "error: Found argument 'bad-command' which wasn't expected, or isn't valid in this context
 
 USAGE:
     tio <SUBCOMMAND>
@@ -80,11 +81,7 @@ mod integration {
     #[test]
     fn test_call_broadcast_with_args() {
         let output = Command::new("./target/release/tio")
-            .args([
-                "broadcast",
-                "TIO_INTEGRATION_TEST_INDEX",
-                "TIO_INTEGRATION_TEST_DATA",
-            ])
+            .args(["broadcast", "TIO_INTEGRATION_TEST_INDEX", "TIO_INTEGRATION_TEST_DATA"])
             .output()
             .expect("failed to broadcast message");
         assert!(String::from_utf8_lossy(&output.stdout).contains(OTHER_BROADCAST_OUTPUT))
