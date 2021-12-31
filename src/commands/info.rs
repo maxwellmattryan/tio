@@ -2,15 +2,12 @@ use async_trait::async_trait;
 
 use crate::{
     cli::Command,
-    error::{Result},
+    error::Result,
     iota::{
-        client::{
-            ClientArgs,
-            Network,
-        },
+        client::{ClientArgs, Network},
+        get_info,
     },
 };
-use crate::iota::get_info;
 
 /// `info` subcommand that queries for node information.
 #[derive(structopt::StructOpt)]

@@ -1,8 +1,6 @@
 use iota_client::Client;
 
-use crate::{
-    error::{Error, Result},
-};
+use crate::error::{Error, Result};
 
 use rand::Rng;
 
@@ -61,11 +59,7 @@ impl ClientArgs {
 }
 
 pub(crate) async fn build_client(node_url: &str) -> Client {
-    let client = Client::builder()
-        .with_node(node_url)
-        .unwrap()
-        .finish()
-        .await;
+    let client = Client::builder().with_node(node_url).unwrap().finish().await;
     match client {
         Ok(c) => c,
         Err(_) => panic!("{:?}", Error::CannotBuildNodeClient),

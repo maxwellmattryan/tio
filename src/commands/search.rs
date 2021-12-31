@@ -7,10 +7,7 @@ use crate::{
     cli::Command,
     error::{Error, Result},
     iota::{
-        client::{
-            ClientArgs,
-            Network
-        },
+        client::{ClientArgs, Network},
         find_message,
     },
 };

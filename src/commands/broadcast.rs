@@ -5,10 +5,7 @@ use crate::{
     error::{Error, Result},
     iota::{
         broadcast_message,
-        client::{
-            ClientArgs,
-            Network
-        },
+        client::{ClientArgs, Network},
     },
 };
 

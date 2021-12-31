@@ -1,13 +1,8 @@
-use iota_client::{bee_message::{payload::Payload, prelude::IndexationPayload, MessageId}};
+use iota_client::bee_message::{payload::Payload, prelude::IndexationPayload, MessageId};
 
 use crate::{
-    error::{Error},
-    iota::{
-        client::{
-            build_client,
-            Network,
-        },
-    }
+    error::Error,
+    iota::client::{build_client, Network},
 };
 
 pub mod client;
@@ -75,5 +70,21 @@ pub async fn get_info(network: &Network) {
         Err(_) => panic!("{:?}", Error::CannotGetNodeInfo),
     };
 
-    println!("NETWORK: {:#?}\nNODE: {:#?}", network_info, node_info);
+    println!(
+        "Network ID: {}\n\
+        Bech32 HRP: {}\n\
+        Node software: {} {}\n\
+        Node URL: {}\n\
+        Node stats: {}mps @ {}%\n\
+        Latest milestone: {} @ {}",
+        network_info.network_id.unwrap(),
+        network_info.bech32_hrp,
+        node_info.nodeinfo.name,
+        node_info.nodeinfo.version,
+        node_info.url,
+        node_info.nodeinfo.referenced_messages_per_second,
+        node_info.nodeinfo.referenced_rate,
+        node_info.nodeinfo.latest_milestone_index,
+        node_info.nodeinfo.latest_milestone_timestamp,
+    );
 }
