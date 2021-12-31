@@ -57,8 +57,8 @@ async fn build_client(network: &Network) -> Client {
 pub async fn broadcast(index: &String, data: &String, network: &Network) {
     let size = data.as_bytes().len();
     println!(
-        "CONTENT: \"{}\"\nINDEX: \"{}\"\nSIZE: {} byte(s)\n",
-        data, index, size
+        "INDEX: \"{}\"\nCONTENT: \"{}\"\nSIZE: {} byte(s)\n",
+        index, data, size
     );
 
     let iota = build_client(network).await;
@@ -73,7 +73,7 @@ pub async fn broadcast(index: &String, data: &String, network: &Network) {
         Err(_) => panic!("{:?}", Error::CannotBroadcastMessage),
     };
 
-    println!("HASH: {}\n", m.id().0);
+    println!("ID: {}\n", m.id().0);
 }
 
 /// Search for a message on a specified IOTA network given its hash ID.
