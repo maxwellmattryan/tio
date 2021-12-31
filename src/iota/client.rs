@@ -1,8 +1,11 @@
+use std::str::FromStr;
+
+use rand::Rng;
+use url::Url;
+
 use iota_client::Client;
 
 use crate::error::{Error, Result};
-
-use rand::Rng;
 
 /// The types of available IOTA networks.
 #[derive(Debug, PartialEq)]
@@ -41,12 +44,23 @@ fn try_network_from_str(arg: &str) -> Result<Network> {
     }
 }
 
+fn try_url_from_str(arg: &str) -> Result<Url> {
+    match Url::from_str(arg) {
+        Ok(s) => Ok(s),
+        Err(_) => Err(Error::CannotParseNodeUrl),
+    }
+}
+
 /// Arguments for network client configuration.
 #[derive(Debug, structopt::StructOpt)]
 pub struct ClientArgs {
     /// IOTA Tangle network to use ("mainnet" and "devnet").
     #[structopt(short, long, parse(try_from_str=try_network_from_str))]
     pub network: Option<Network>,
+
+    /// Particular node URL to send API requests to.
+    #[structopt(short, long, parse(try_from_str=try_url_from_str))]
+    pub url: Option<Url>,
 }
 
 impl ClientArgs {
@@ -54,6 +68,16 @@ impl ClientArgs {
         match self.network {
             Some(ref n) => n,
             None => &Network::ChrysalisDevnet,
+        }
+    }
+
+    pub fn unpack_url(&self) -> &str {
+        match self.url {
+            Some(ref u) => u.as_str(),
+            None => match self.network {
+                Some(ref n) => n.url(),
+                None => Network::ChrysalisDevnet.url(),
+            }
         }
     }
 }

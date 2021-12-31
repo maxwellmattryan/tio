@@ -28,7 +28,7 @@ The IOTA ledger refers to all value-based messages.
 - Better logging and output formatting (indexation, coloring, etc.)
 - Better message formatting on `broadcast` (string-ify JSON data)
 - More arguments for commands:
-    - Node URLs (see [`url`](https://docs.rs/url/latest/url/)) and authentication (username, password, and JWT)
+    - Node authentication (username, password, and JWT)
     - Specify activity to watch for with `monitor`
     - Time interval between `spam` messages
 - Data encryption / decryption including algorithm selection

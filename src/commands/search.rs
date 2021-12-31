@@ -7,7 +7,7 @@ use crate::{
     cli::Command,
     error::{Error, Result},
     iota::{
-        client::{ClientArgs, Network},
+        client::{ClientArgs},
         find_message,
     },
 };
@@ -57,10 +57,11 @@ pub struct SearchCommand {
 #[async_trait]
 impl Command for SearchCommand {
     async fn run(&self) -> Result<()> {
-        let network: &Network = self.client.unpack_network();
-
+        let node_url = self.client.unpack_url();
+        println!("SEARCH URL: {}", node_url);
         let id: &[u8; 32] = &self.search.unpack_hash();
-        Ok(find_message(id, network).await)
+
+        Ok(find_message(id, node_url).await)
     }
 }
 

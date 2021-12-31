@@ -1,18 +1,19 @@
-use iota_client::bee_message::{payload::Payload, prelude::IndexationPayload, MessageId};
+use iota_client::bee_message::{
+    payload::Payload,
+    prelude::IndexationPayload,
+    MessageId,
+};
 
 use crate::{
     error::Error,
-    iota::client::{build_client, Network},
+    iota::client::{build_client},
 };
 
 pub mod client;
 
 /// Broadcast a message with given data to a specific IOTA network.
-pub async fn broadcast_message(index: &String, data: &String, network: &Network) {
-    let size = data.as_bytes().len();
-    println!("INDEX: \"{}\"\nDATA: \"{}\"\nSIZE: {} byte(s)\n", index, data, size);
-
-    let iota = build_client(network.url()).await;
+pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
+    let iota = build_client(node_url).await;
     let m = match iota
         .message()
         .with_index(index)
@@ -24,13 +25,14 @@ pub async fn broadcast_message(index: &String, data: &String, network: &Network)
         Err(_) => panic!("{:?}", Error::CannotBroadcastMessage),
     };
 
-    println!("ID: {}\n", m.id().0);
+    let size = data.as_bytes().len();
+    println!("INDEX: \"{}\"\nDATA: \"{}\"\nSIZE: {} byte(s)\nID: {}", index, data, size, m.id().0);
 }
 
 /// Search for a message on a specified IOTA network given its hash ID.
-pub async fn find_message(message_id: &[u8; 32], network: &Network) {
+pub async fn find_message(message_id: &[u8; 32], node_url: &str) {
     let id = MessageId::new(*message_id);
-    let iota = build_client(network.url()).await;
+    let iota = build_client(node_url).await;
 
     let message = match iota.get_message().data(&id).await {
         Ok(m) => m,
@@ -54,12 +56,12 @@ pub async fn find_message(message_id: &[u8; 32], network: &Network) {
     };
 
     let size = string.as_bytes().len();
-    println!("INDEX: \"{}\"\nDATA: {:#?}\nSIZE: {} byte(s)\n", index, string, size);
+    println!("INDEX: \"{}\"\nDATA: {:#?}\nSIZE: {} byte(s)", index, string, size);
 }
 
 /// Query a node for its network information.
-pub async fn get_info(network: &Network) {
-    let iota = build_client(network.url()).await;
+pub async fn get_info(node_url: &str) {
+    let iota = build_client(node_url).await;
 
     let network_info = match iota.get_network_info().await {
         Ok(ni) => ni,
@@ -73,9 +75,9 @@ pub async fn get_info(network: &Network) {
     println!(
         "Network ID: {}\n\
         Bech32 HRP: {}\n\
-        Node software: {} {}\n\
-        Node URL: {}\n\
-        Node stats: {}mps @ {}%\n\
+        Software: {} {}\n\
+        URL: {}\n\
+        Stats: {}mps @ {:.2}%\n\
         Latest milestone: {} @ {}",
         network_info.network_id.unwrap(),
         network_info.bech32_hrp,

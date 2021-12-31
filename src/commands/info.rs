@@ -4,7 +4,7 @@ use crate::{
     cli::Command,
     error::Result,
     iota::{
-        client::{ClientArgs, Network},
+        client::{ClientArgs},
         get_info,
     },
 };
@@ -19,8 +19,9 @@ pub struct InfoCommand {
 #[async_trait]
 impl Command for InfoCommand {
     async fn run(&self) -> Result<()> {
-        let network: &Network = self.client.unpack_network();
+        let node_url = self.client.unpack_url();
+        println!("INFO URL: {}", node_url);
 
-        Ok(get_info(network).await)
+        Ok(get_info(node_url).await)
     }
 }

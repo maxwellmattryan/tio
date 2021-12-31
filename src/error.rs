@@ -20,6 +20,10 @@ pub enum Error {
     #[error("Unable to retrieve the node information")]
     CannotGetNodeInfo,
 
+    /// The node URL is invalid.
+    #[error("Unable to parse the node URL")]
+    CannotParseNodeUrl,
+
     /// An (unknown) error occurred when executing some command.
     #[error("Something went wrong")]
     Generic,

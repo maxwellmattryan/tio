@@ -5,7 +5,7 @@ use crate::{
     error::{Error, Result},
     iota::{
         broadcast_message,
-        client::{ClientArgs, Network},
+        client::{ClientArgs},
     },
 };
 
@@ -48,14 +48,14 @@ pub struct BroadcastArgs {
 }
 
 impl BroadcastArgs {
-    pub fn unpack_args(&self) -> (String, String) {
+    pub fn unpack_args(&self) -> (&str, &str) {
         let index = match &self.index {
-            Some(i) => i.clone(),
-            None => String::from("tio-cli"),
+            Some(i) => i.as_str(),
+            None => "tio-cli",
         };
         let data = match &self.data {
-            Some(d) => d.clone(),
-            None => String::from("tio-message"),
+            Some(d) => d.as_str(),
+            None => "tio-message",
         };
 
         (index, data)
@@ -75,10 +75,11 @@ pub struct BroadcastCommand {
 #[async_trait]
 impl Command for BroadcastCommand {
     async fn run(&self) -> Result<()> {
-        let network: &Network = self.client.unpack_network();
+        let node_url = self.client.unpack_url();
+        println!("BROADCAST URL: {}", node_url);
+        let (index, data) = self.broadcast.unpack_args();
 
-        let (index, data) = &self.broadcast.unpack_args();
-        Ok(broadcast_message(index, data, network).await)
+        Ok(broadcast_message(index, data, node_url).await)
     }
 }
 
