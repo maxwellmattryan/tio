@@ -3,7 +3,13 @@ use async_trait::async_trait;
 use crate::{
     cli::Command,
     error::{Error, Result},
-    iota::{broadcast, ClientArgs, Network},
+    iota::{
+        broadcast_message,
+        client::{
+            ClientArgs,
+            Network
+        },
+    },
 };
 
 /// The maximum number of bytes allowed for a data message's index.
@@ -48,11 +54,11 @@ impl BroadcastArgs {
     pub fn unpack_args(&self) -> (String, String) {
         let index = match &self.index {
             Some(i) => i.clone(),
-            None => String::from("TIO_DATA"),
+            None => String::from("tio-cli"),
         };
         let data = match &self.data {
             Some(d) => d.clone(),
-            None => String::from("TIO_MESSAGE"),
+            None => String::from("tio-message"),
         };
 
         (index, data)
@@ -75,7 +81,7 @@ impl Command for BroadcastCommand {
         let network: &Network = self.client.unpack_network();
 
         let (index, data) = &self.broadcast.unpack_args();
-        Ok(broadcast(index, data, network).await)
+        Ok(broadcast_message(index, data, network).await)
     }
 }
 
