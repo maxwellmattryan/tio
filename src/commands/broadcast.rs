@@ -1,3 +1,4 @@
+use arboard::Clipboard;
 use async_trait::async_trait;
 
 use crate::{
@@ -75,7 +76,12 @@ impl Command for BroadcastCommand {
         let (index, data) = self.broadcast.unpack_args();
         let node_url = self.client.unpack_url();
 
-        Ok(broadcast_message(index, data, node_url).await)
+        let message_id = broadcast_message(index, data, node_url).await;
+
+        let mut clipboard = Clipboard::new().unwrap();
+        clipboard.set_text(message_id.to_string()).unwrap();
+
+        Ok(())
     }
 }
 

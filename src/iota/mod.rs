@@ -13,7 +13,7 @@ use crate::{error::Error, iota::client::build_client};
 pub mod client;
 
 /// Broadcast a message with given data to a specific IOTA network.
-pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
+pub async fn broadcast_message(index: &str, data: &str, node_url: &str) -> MessageId {
     let iota = build_client(node_url).await;
     let m = match iota
         .message()
@@ -37,7 +37,9 @@ pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
         index,
         data,
         size,
-    )
+    );
+
+    m.id().0
 }
 
 fn print_message_payload(payload: &Payload) {
