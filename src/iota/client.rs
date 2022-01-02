@@ -64,13 +64,6 @@ pub struct ClientArgs {
 }
 
 impl ClientArgs {
-    pub fn unpack_network(&self) -> &Network {
-        match self.network {
-            Some(ref n) => n,
-            None => &Network::ChrysalisDevnet,
-        }
-    }
-
     pub fn unpack_url(&self) -> &str {
         match self.url {
             Some(ref u) => {

@@ -15,7 +15,6 @@ Please refer to the [usage documentation](./docs/USAGE.md) for detailed informat
 Each list below is ordered in terms of priority (higher position = higher priority).
 
 ### Features
-- `info` command (queries the node information (`api/v1/info` endpoint) of an IOTA node)
 - `monitor` command (watches a given address for updates in the IOTA ledger*)
 - `spam` command (repeatedly sends a data message to the IOTA Tangle)
 
@@ -26,7 +25,7 @@ The IOTA ledger refers to all value-based messages.
 ### Enhancements
 - Clipboard copying (IDs, messages, transactions, data, etc.)
 - Better logging and output formatting (indexation, coloring, etc.)
-- Better message formatting on `broadcast` (string-ify JSON data)
+- Better message payload formatting on `broadcast` (string-ify JSON data)
 - More arguments for commands:
     - Node authentication (username, password, and JWT)
     - Specify activity to watch for with `monitor`

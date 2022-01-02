@@ -38,12 +38,12 @@ For more information try --help
 
 const BASE_BROADCAST_OUTPUT: &str = "Index: tio-cli
 Data: tio-message
-Size: 11 byte(s)
+Size: 18 byte(s)
 ";
 
 const OTHER_BROADCAST_OUTPUT: &str = "Index: tio-cli-test
 Data: tio-message-test
-Size: 16 byte(s)
+Size: 28 byte(s)
 ";
 
 const BASE_SEARCH_OUTPUT: &str = BASE_BROADCAST_OUTPUT;
@@ -80,7 +80,7 @@ mod integration {
     #[test]
     fn test_call_broadcast_with_args() {
         let output = Command::new("./target/release/tio")
-            .args(["broadcast", "tio-cli-test", "tio-message-test"])
+            .args(["broadcast", "tio-message-test", "tio-cli-test"])
             .output()
             .expect("failed to broadcast message");
         assert!(String::from_utf8_lossy(&output.stdout).contains(OTHER_BROADCAST_OUTPUT))
