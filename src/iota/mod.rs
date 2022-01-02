@@ -1,5 +1,12 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
-use iota_client::bee_message::{payload::Payload, prelude::IndexationPayload, MessageId};
+use iota_client::bee_message::{
+    address::Address,
+    input::Input,
+    output::Output,
+    payload::Payload,
+    prelude::{Essence, IndexationPayload, TransactionPayload},
+    Message, MessageId,
+};
 
 use crate::{error::Error, iota::client::build_client};
 
@@ -19,9 +26,9 @@ pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
         Err(_) => panic!("{:?}", Error::CannotBroadcastMessage),
     };
 
-    let size = data.as_bytes().len();
+    let size = index.as_bytes().len() + data.as_bytes().len();
     println!(
-        "--- Broadcast Result ---\n\
+        "--- Data Message ---\n\
         ID: {}\n\
         Index: {}\n\
         Data: {}\n\
@@ -33,12 +40,85 @@ pub async fn broadcast_message(index: &str, data: &str, node_url: &str) {
     )
 }
 
+fn print_message_payload(payload: &Payload) {
+    match payload {
+        Payload::Indexation(p) => unsafe {
+            let data_payload: &IndexationPayload = p.as_ref();
+
+            let index = match String::from_utf8(data_payload.index().iter().cloned().collect()) {
+                Ok(s) => s,
+                Err(_) => panic!("{:?}", Error::MessageDataIndexInvalid),
+            };
+            let data = match String::from_utf8(data_payload.data().iter().cloned().collect()) {
+                Ok(s) => s,
+                Err(_) => String::from_utf8_unchecked(data_payload.data().iter().cloned().collect()),
+            };
+            let size = index.as_bytes().len() + data.as_bytes().len();
+
+            println!(
+                "--- Data Payload ---\n\
+                Index: {}\n\
+                Data: {}\n\
+                Size: {} byte(s)",
+                index, data, size,
+            )
+        },
+        Payload::Transaction(p) => {
+            println!("--- UTXO Payload ---");
+
+            let tx: &TransactionPayload = p.as_ref();
+            match tx.essence() {
+                Essence::Regular(e) => {
+                    if e.inputs().len() > 0 {
+                        println!("Input(s):");
+                        for input in e.inputs() {
+                            match input {
+                                Input::Utxo(i) => {
+                                    println!("{}", i.to_string());
+                                }
+                                _ => (),
+                            }
+                        }
+                    }
+
+                    if e.outputs().len() > 0 {
+                        println!("\nOutput(s):");
+                        for output in e.outputs() {
+                            match output {
+                                Output::SignatureLockedSingle(sls) => match sls.address() {
+                                    Address::Ed25519(a) => {
+                                        println!(
+                                            "Address: {}, Type: {}, Amount: {}i",
+                                            a.to_string(),
+                                            "Ed25519".to_string(),
+                                            sls.amount()
+                                        );
+                                    }
+                                },
+                                _ => (),
+                            }
+                        }
+                    }
+
+                    match e.payload() {
+                        Some(payload) => {
+                            println!();
+                            print_message_payload(payload)
+                        }
+                        None => (),
+                    }
+                }
+            }
+        }
+        _ => panic!("{:?}", Error::MessageWrongPayload),
+    }
+}
+
 /// Search for a message on a specified IOTA network given its hash ID.
 pub async fn find_message(message_id: &[u8; 32], node_url: &str) {
-    let id = MessageId::new(*message_id);
     let iota = build_client(node_url).await;
-
-    let message = match iota.get_message().data(&id).await {
+    let id = MessageId::new(*message_id);
+    let message: Message = match iota.get_message().data(&id).await {
         Ok(m) => m,
         Err(_) => panic!("{:?}", Error::MessageNotFound),
     };
@@ -46,27 +126,8 @@ pub async fn find_message(message_id: &[u8; 32], node_url: &str) {
         Some(p) => p,
         None => panic!("{:?}", Error::MessageEmpty),
     };
-    let data: &IndexationPayload = match payload {
-        Payload::Indexation(p) => p.as_ref(),
-        _ => panic!("{:?}", Error::MessageWrongPayload),
-    };
-    let index = match String::from_utf8(data.index().iter().cloned().collect()) {
-        Ok(s) => s,
-        Err(_) => panic!("{:?}", Error::MessageDataIndexInvalid),
-    };
-    let string = match String::from_utf8(data.data().iter().cloned().collect()) {
-        Ok(s) => s,
-        Err(_) => panic!("{:?}", Error::MessageDataInvalid),
-    };
 
-    let size = string.as_bytes().len();
-    println!(
-        "--- Search Result ---\n\
-        Index: {}\n\
-        Data: {}\n\
-        Size: {} byte(s)",
-        index, string, size,
-    )
+    print_message_payload(payload)
 }
 
 /// Query a node for its network information.

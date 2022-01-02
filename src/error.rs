@@ -63,4 +63,8 @@ pub enum Error {
     /// The payload type of the message is wrong.
     #[error("The message's payload type is wrong (should be Indexation)")]
     MessageWrongPayload,
+
+    /// The transaction essence is invalid.
+    #[error("The message's transaction essence is invalid")]
+    MessageEssenceInvalid,
 }

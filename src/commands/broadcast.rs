@@ -12,16 +12,6 @@ pub const MAX_INDEX_BYTES: usize = 64;
 /// The maximum number of bytes allowed for a data message's payload.
 pub const MAX_DATA_BYTES: usize = 4096;
 
-fn try_data_index_from_str(arg: &str) -> Result<String> {
-    let index = arg.to_string();
-    let size = index.as_bytes().len();
-
-    match size {
-        s if s < MAX_INDEX_BYTES => Ok(index),
-        _ => Err(Error::MessageDataIndexTooLarge(size)),
-    }
-}
-
 fn try_data_from_str(arg: &str) -> Result<String> {
     let data = arg.to_string();
     let size = data.as_bytes().len();
@@ -32,16 +22,26 @@ fn try_data_from_str(arg: &str) -> Result<String> {
     }
 }
 
+fn try_data_index_from_str(arg: &str) -> Result<String> {
+    let index = arg.to_string();
+    let size = index.as_bytes().len();
+
+    match size {
+        s if s < MAX_INDEX_BYTES => Ok(index),
+        _ => Err(Error::MessageDataIndexTooLarge(size)),
+    }
+}
+
 /// Arguments for the `broadcast` subcommand.
 #[derive(Debug, structopt::StructOpt)]
 pub struct BroadcastArgs {
-    /// Indexation key used in the IOTA Tangle.
-    #[structopt(parse(try_from_str=try_data_index_from_str))]
-    pub index: Option<String>,
-
     /// UTF-8 encoded data embedded inside the indexation payload.
     #[structopt(parse(try_from_str=try_data_from_str))]
     pub data: Option<String>,
+
+    /// Indexation key used in the IOTA Tangle.
+    #[structopt(parse(try_from_str=try_data_index_from_str))]
+    pub index: Option<String>,
 }
 
 impl BroadcastArgs {
